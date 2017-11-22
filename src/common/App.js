@@ -7,8 +7,8 @@ import { WorkflowsPage } from '../pages/WorkflowsPage';
 const App = () => (
     <BrowserRouter>
         <Switch>
-            <Route exact path='/' component={DashboardPage} />
-            <Route exact path='/workflows' component={WorkflowsPage} />
+            <Route exact path='/admin/workflows' component={WorkflowsPage} />
+            <Route path='/' component={DashboardPage} />
         </Switch>
     </BrowserRouter>
 );
