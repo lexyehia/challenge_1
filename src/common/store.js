@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const STORE = {
     _id: "bU4rMI7fEeeqxlvy4NOyyA==",
     ProjectId: "bOd74o7fEeeqxlvy4NOyyA==",
@@ -36,7 +38,7 @@ const STORE = {
 };
 
 export function getWorkflow() {
-    return STORE.Stages;
+    return _.cloneDeep(STORE.Stages);
 }
 
 export function setWorkflow(input) {

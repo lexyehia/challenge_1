@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import _ from 'lodash';
+import { getWorkflow, setWorkflow } from "../common/store";
 import { NavBar } from '../components/NavBar';
 import { WorkflowsList } from '../components/WorkflowsList';
 import { ActionsList } from "../components/ActionsList";
@@ -11,9 +12,6 @@ export class WorkflowsPage extends React.Component {
         super(props);
 
         this.state = {
-            _id: "bU4rMI7fEeeqxlvy4NOyyA==",
-            ProjectId: "bOd74o7fEeeqxlvy4NOyyA==",
-            AcctId: "GVb1w0skuUKO+FfzgvG+JA==",
             actions: [
                 "Import",
                 "Export",
@@ -73,13 +71,14 @@ export class WorkflowsPage extends React.Component {
                 <div>
                     <Button
                         style={{ margin: 10 }}
+                        onClick={this._save}
                         bsStyle="success"
                     >
                         Save
                     </Button>
                     <Button
                         style={{ margin: 10 }}
-
+                        onClick={this._reset}
                         bsStyle="warning"
                     >
                         Reset
@@ -89,8 +88,20 @@ export class WorkflowsPage extends React.Component {
         )
     }
 
+    _save = (e) => {
+        e.preventDefault();
+
+        setWorkflow(this.state.workflows);
+    };
+
+    _reset = (e) => {
+        e.preventDefault();
+
+        this._organizeWorkflow();
+    };
+
     _organizeWorkflow = () => {
-        const { workflows } = this.state;
+        const workflows = getWorkflow();
         const arr = [];
         const first = _.find(workflows, 'isStart');
         arr.push(first);
@@ -114,7 +125,6 @@ export class WorkflowsPage extends React.Component {
         if (originId) {
             const originIndex = _.findIndex(arr, ['id', Number(originId)]);
             arr.splice(originIndex, 1);
-            //delete arr[originIndex];
         }
 
         const targetIndex = _.findIndex(arr, ['id', targetId]);
