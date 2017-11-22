@@ -28,6 +28,12 @@ export class ActionItem extends React.Component {
         )
     }
 
+    /**
+     * Load this action's text and set originId to a falsy value
+     * upon drag start
+     * @param e event
+     * @private
+     */
     _startDragHandler = (e) => {
         e.dataTransfer.setData('text/plain', this.props.text);
         e.dataTransfer.setData('originId', "");

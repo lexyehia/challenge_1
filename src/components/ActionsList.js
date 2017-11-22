@@ -12,7 +12,6 @@ const styles = {
     },
 };
 
-
 export const ActionsList = (props) => (
     <div>
         <h4>Available list of actions:</h4><br />

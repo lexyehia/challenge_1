@@ -7,7 +7,8 @@ const styles = {
         display: 'flex',
         direction: 'row',
         margin: '0 auto',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
         width: 500,
     },
 };
@@ -24,11 +25,12 @@ export class WorkflowsList extends React.Component {
             <div>
                 <h4>Current sequence of workflows:</h4><br />
                 <div style={styles.container}>
-                    {this.props.workflows.map(workflow => (
+                    {this.props.workflows.map((workflow, i) => (
                         <WorkflowPanel
                             key={workflow.id}
                             id={workflow.id}
                             text={workflow.action}
+                            step={i + 1}
                             deplaceWorkflow={this.props.addWorkflow}
                         />
                     ))}
@@ -40,5 +42,5 @@ export class WorkflowsList extends React.Component {
 
 WorkflowsList.propTypes = {
     workflows: PropTypes.array.isRequired,
-    addWorkflow: PropTypes.func,
+    addWorkflow: PropTypes.func.isRequired,
 };

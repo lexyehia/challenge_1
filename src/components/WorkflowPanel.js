@@ -10,6 +10,9 @@ const styles = {
         width: 100,
         backgroundColor: 'beige',
     },
+    text: {
+        fontWeight: 'bold',
+    }
 };
 
 export class WorkflowPanel extends React.Component {
@@ -33,17 +36,28 @@ export class WorkflowPanel extends React.Component {
                 onDragEnd={this._dragLeaveHandler}
                 onDrop={this._dropHandler}
             >
-                {this.props.text}
+                <p style={styles.text}>{this.props.text}</p>
+                <p>(Step {this.props.step})</p>
             </Panel>
         );
     }
 
+    /**
+     * Load the drag event with this Node's action text and id
+     * @param e event
+     * @private
+     */
     _dragStartHandler = (e) => {
         e.dataTransfer.setData('text/plain', this.props.text);
-        e.dataTransfer.setData('originId', this.props.id);
+        e.dataTransfer.setData('originId', this.props.id.toString());
         e.dataTransfer.dropEffect = 'move';
-    }
+    };
 
+    /**
+     * Hover effect to beige
+     * @param e
+     * @private
+     */
     _dragOverHandler = (e) => {
         e.preventDefault();
 
@@ -52,12 +66,22 @@ export class WorkflowPanel extends React.Component {
         })
     };
 
-    _dragLeaveHandler = (e) => {
+    /**
+     * Remove hover effect
+     * @private
+     */
+    _dragLeaveHandler = () => {
         this.setState({
             hover: false,
         })
     };
 
+    /**
+     * Remove hover effect, and invoke WorkflowsPage._addNewWorkflow()
+     * with event's loaded action text and originId (if any)
+     * @param e event
+     * @private
+     */
     _dropHandler = (e) => {
         e.preventDefault();
 
@@ -77,4 +101,6 @@ export class WorkflowPanel extends React.Component {
 
 WorkflowPanel.propTypes = {
     text: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    deplaceWorkflow: PropTypes.func.isRequired,
 };

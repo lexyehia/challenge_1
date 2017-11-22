@@ -37,10 +37,18 @@ const STORE = {
     ]
 };
 
+/**
+ * Fetch a deep copy of STORE's Stages
+ * @returns {array}
+ */
 export function getWorkflow() {
     return _.cloneDeep(STORE.Stages);
 }
 
+/**
+ * Set STORE's Stages values
+ * @param input array
+ */
 export function setWorkflow(input) {
     STORE.Stages = input;
 }

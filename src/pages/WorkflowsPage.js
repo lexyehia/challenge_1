@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import _ from 'lodash';
-import { getWorkflow, setWorkflow } from "../common/store";
+import { getWorkflow, setWorkflow } from '../common/store';
+import { findNextInChain } from '../common/helpers';
 import { NavBar } from '../components/NavBar';
 import { WorkflowsList } from '../components/WorkflowsList';
-import { ActionsList } from "../components/ActionsList";
+import { ActionsList } from '../components/ActionsList';
 
 export class WorkflowsPage extends React.Component {
 
@@ -19,36 +20,7 @@ export class WorkflowsPage extends React.Component {
                 "Extract",
                 "Split",
             ],
-            workflows: [
-                {
-                    "id": 1,
-                    "action": "Import",
-                    "isStart": true,
-                    "prevStage": null,
-                    "nextStage": 2,
-                },
-                {
-                    "id": 2,
-                    "action": "Sort",
-                    "isStart": false,
-                    "prevStage": 1,
-                    "nextStage": 3,
-                },
-                {
-                    "id": 3,
-                    "action": "Extract",
-                    "isStart": false,
-                    "prevStage": 2,
-                    "nextStage": null,
-                },
-                {
-                    "id": 4,
-                    "action": "Export",
-                    "isStart": false,
-                    "prevStage": null,
-                    "nextStage": null,
-                }
-            ]
+            workflows: [],
         };
     }
 
@@ -72,14 +44,14 @@ export class WorkflowsPage extends React.Component {
                     <Button
                         style={{ margin: 10 }}
                         onClick={this._save}
-                        bsStyle="success"
+                        bsStyle='success'
                     >
                         Save
                     </Button>
                     <Button
                         style={{ margin: 10 }}
                         onClick={this._reset}
-                        bsStyle="warning"
+                        bsStyle='warning'
                     >
                         Reset
                     </Button>
@@ -88,18 +60,33 @@ export class WorkflowsPage extends React.Component {
         )
     }
 
+    /**
+     * Persist state's workflow to Store
+     * @param e event
+     * @private
+     */
     _save = (e) => {
         e.preventDefault();
 
         setWorkflow(this.state.workflows);
     };
 
+    /**
+     * Reset state's workflow from Store data
+     * @param e
+     * @private
+     */
     _reset = (e) => {
         e.preventDefault();
 
         this._organizeWorkflow();
     };
 
+    /**
+     * Fetch workflows from Store, organize them per nextStage of
+     * each element, and set to this component's State
+     * @private
+     */
     _organizeWorkflow = () => {
         const workflows = getWorkflow();
         const arr = [];
@@ -113,6 +100,16 @@ export class WorkflowsPage extends React.Component {
         })
     }
 
+    /**
+     * Add a new element into the workflows array before targetId,
+     * and removing the element where id = originId if originId
+     * is provided
+     *
+     * @param {string} action
+     * @param {string} originId
+     * @param {number} targetId
+     * @private
+     */
     _addNewWorkflow = (action, originId, targetId) => {
         let arr = [...this.state.workflows];
         const id = arr.length + 1;
@@ -122,15 +119,26 @@ export class WorkflowsPage extends React.Component {
             action,
         };
 
-        if (originId) {
-            const originIndex = _.findIndex(arr, ['id', Number(originId)]);
-            arr.splice(originIndex, 1);
-        }
-
+        /* Find target element */
         const targetIndex = _.findIndex(arr, ['id', targetId]);
 
-        arr.splice(targetIndex, 0, obj);
+        /* If originId provided, switch elements around */
+        if (originId) {
+            const originIndex = _.findIndex(arr, ['id', Number(originId)]);
+            const _el = _.clone(arr[targetIndex]);
+            arr[targetIndex] = arr[originIndex];
+            arr[originIndex] = _el;
+        } else {
+            /* Add new element before target element */
+            arr.splice(targetIndex, 0, obj);
+        }
 
+        /* Fix array's indices */
+        //arr = arr.filter(val => val);
+
+        /* Fix each element's isStart, prevState, nextStage based on
+         * new order of elements
+         */
         arr.forEach((e, i) => {
             if (i === 0) {
                 e.isStart = true;
@@ -147,16 +155,9 @@ export class WorkflowsPage extends React.Component {
             }
         });
 
+        /* Set new state */
         this.setState({
             workflows: arr,
         })
-    }
-}
-
-function findNextInChain(originalArr, newArr, item) {
-    if (item.nextStage) {
-        const next = _.find(originalArr, ['id', item.nextStage]);
-        newArr.push(next);
-        return findNextInChain(originalArr, newArr, next);
     }
 }
