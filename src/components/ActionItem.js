@@ -29,11 +29,7 @@ export class ActionItem extends React.Component {
     }
 
     _startDragHandler = (e) => {
-        const data = {
-            action: this.props.text,
-        };
-
-        e.dataTransfer.setData('text', JSON.stringify(data));
+        e.dataTransfer.setData('text/plain', this.props.text);
         e.dataTransfer.dropEffect = 'move';
     }
 }

@@ -32,7 +32,7 @@ export class WorkflowPanel extends React.Component {
                 onDragEnd={this._dragLeaveHandler}
                 onDrop={this._dropHandler}
             >
-                {this.props.action}
+                {this.props.text}
             </Panel>
         );
     }
@@ -54,6 +54,10 @@ export class WorkflowPanel extends React.Component {
     _dropHandler = (e) => {
         e.preventDefault();
 
+        this.props.deplaceWorkflow(
+            e.dataTransfer.getData('text/plain'),
+            this.props.id,
+        );
     }
 
 }

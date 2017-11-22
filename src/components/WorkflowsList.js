@@ -27,7 +27,9 @@ export class WorkflowsList extends React.Component {
                     {this.props.workflows.map(workflow => (
                         <WorkflowPanel
                             key={workflow.id}
-                            {...workflow}
+                            id={workflow.id}
+                            text={workflow.action}
+                            deplaceWorkflow={this.props.addWorkflow}
                         />
                     ))}
                 </div>
@@ -47,4 +49,5 @@ export class WorkflowsList extends React.Component {
 
 WorkflowsList.propTypes = {
     workflows: PropTypes.array.isRequired,
+    addWorkflow: PropTypes.func,
 };

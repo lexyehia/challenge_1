@@ -63,7 +63,10 @@ export class WorkflowsPage extends React.Component {
             <div className='App'>
                 <NavBar />
                 <div>
-                    <WorkflowsList workflows={this.state.workflows}/>
+                    <WorkflowsList
+                        workflows={this.state.workflows}
+                        addWorkflow={this._addNewWorkflow}
+                    />
                     <br />
                     <ActionsList actions={this.state.actions}/>
                 </div>
@@ -93,6 +96,39 @@ export class WorkflowsPage extends React.Component {
         arr.push(first);
 
         findNextInChain(workflows, arr, first);
+
+        this.setState({
+            workflows: arr,
+        })
+    }
+
+    _addNewWorkflow = (action, targetId) => {
+        const id = this.state.workflows.length + 1;
+        const targetIndex = _.findIndex(this.state.workflows, ['id', targetId]);
+
+        const obj = {
+            id,
+            action,
+        };
+
+        const arr = [...this.state.workflows];
+        arr.splice(targetIndex, 0, obj);
+
+        arr.forEach((e, i) => {
+            if (i === 0) {
+                e.isStart = true;
+                e.prevStage = null;
+                e.nextStage = arr[i+1].id;
+            } else if (i === arr.length - 1) {
+                e.isStart = false;
+                e.prevStage = arr[i-1].id;
+                e.nextStage = null;
+            } else {
+                e.isStart = false;
+                e.prevStage = arr[i-1].id;
+                e.nextStage = arr[i+1].id;
+            }
+        });
 
         this.setState({
             workflows: arr,
