@@ -36,15 +36,6 @@ export class WorkflowsList extends React.Component {
             </div>
         );
     }
-
-    _listDropHandler = (e) => {
-        e.preventDefault();
-        const data = JSON.parse(e.dataTransfer.getData('text'));
-        console.log(data, e, this)
-        const id = Math.floor(Math.random() * 100);
-
-    }
-
 }
 
 WorkflowsList.propTypes = {

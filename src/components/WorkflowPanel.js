@@ -9,7 +9,7 @@ const styles = {
     hover: {
         width: 100,
         backgroundColor: 'beige',
-    }
+    },
 };
 
 export class WorkflowPanel extends React.Component {
@@ -27,6 +27,7 @@ export class WorkflowPanel extends React.Component {
             <Panel
                 style={this.state.hover ? styles.hover : styles.normal}
                 draggable
+                onDragStart={this._dragStartHandler}
                 onDragOver={this._dragOverHandler}
                 onDragLeave={this._dragLeaveHandler}
                 onDragEnd={this._dragLeaveHandler}
@@ -37,25 +38,36 @@ export class WorkflowPanel extends React.Component {
         );
     }
 
+    _dragStartHandler = (e) => {
+        e.dataTransfer.setData('text/plain', this.props.text);
+        e.dataTransfer.setData('originId', this.props.id);
+        e.dataTransfer.dropEffect = 'move';
+    }
+
     _dragOverHandler = (e) => {
         e.preventDefault();
 
         this.setState({
             hover: true,
         })
-    }
+    };
 
     _dragLeaveHandler = (e) => {
         this.setState({
             hover: false,
         })
-    }
+    };
 
     _dropHandler = (e) => {
         e.preventDefault();
 
+        this.setState({
+            hover: false,
+        });
+
         this.props.deplaceWorkflow(
             e.dataTransfer.getData('text/plain'),
+            e.dataTransfer.getData('originId'),
             this.props.id,
         );
     }

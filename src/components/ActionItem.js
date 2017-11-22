@@ -30,6 +30,7 @@ export class ActionItem extends React.Component {
 
     _startDragHandler = (e) => {
         e.dataTransfer.setData('text/plain', this.props.text);
+        e.dataTransfer.setData('originId', "");
         e.dataTransfer.dropEffect = 'move';
     }
 }

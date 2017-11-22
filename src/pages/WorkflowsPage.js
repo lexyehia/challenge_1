@@ -102,16 +102,23 @@ export class WorkflowsPage extends React.Component {
         })
     }
 
-    _addNewWorkflow = (action, targetId) => {
-        const id = this.state.workflows.length + 1;
-        const targetIndex = _.findIndex(this.state.workflows, ['id', targetId]);
+    _addNewWorkflow = (action, originId, targetId) => {
+        let arr = [...this.state.workflows];
+        const id = arr.length + 1;
 
         const obj = {
             id,
             action,
         };
 
-        const arr = [...this.state.workflows];
+        if (originId) {
+            const originIndex = _.findIndex(arr, ['id', Number(originId)]);
+            arr.splice(originIndex, 1);
+            //delete arr[originIndex];
+        }
+
+        const targetIndex = _.findIndex(arr, ['id', targetId]);
+
         arr.splice(targetIndex, 0, obj);
 
         arr.forEach((e, i) => {
