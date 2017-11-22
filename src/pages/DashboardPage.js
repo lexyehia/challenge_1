@@ -9,7 +9,7 @@ export const DashboardPage = () => (
         <p>
             <Link to="/admin/workflows">
                 <Button>
-                    Start Workflows
+                    Setup Workflow
                 </Button>
             </Link>
         </p>
