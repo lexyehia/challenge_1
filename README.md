@@ -1,0 +1,1 @@
+Start the project with `yarn install` followed by `yarn start`.
