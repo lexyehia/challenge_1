@@ -1,5 +1,6 @@
 import React from 'react';
 import { Panel } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 const styles = {
     panel: {
@@ -12,6 +13,10 @@ export const WorkflowPanel = (props) => (
         style={styles.panel}
         draggable
     >
-        Test
+        {props.text}
     </Panel>
 );
+
+WorkflowPanel.propTypes = {
+    text: PropTypes.string.isRequired,
+};
