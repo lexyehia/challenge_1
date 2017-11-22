@@ -15,7 +15,7 @@ export class WorkflowsPage extends React.Component {
         return (
             <div className='App'>
                 <NavBar />
-                <div style={styles.container}>
+                <div>
                 </div>
                 <div>
                     <Button
