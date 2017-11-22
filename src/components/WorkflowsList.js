@@ -13,20 +13,37 @@ const styles = {
 };
 
 
-export const WorkflowsList = (props) => (
-    <div>
-        <h4>Current sequence of workflows:</h4><br />
-        <div style={styles.container}>
-            {props.workflows.map(workflow => (
-                <WorkflowPanel
-                    key={workflow.id}
-                    id={workflow.id}
-                    text={workflow.action}
-                />
-            ))}
-        </div>
-    </div>
-);
+export class WorkflowsList extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <h4>Current sequence of workflows:</h4><br />
+                <div style={styles.container}>
+                    {this.props.workflows.map(workflow => (
+                        <WorkflowPanel
+                            key={workflow.id}
+                            {...workflow}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    _listDropHandler = (e) => {
+        e.preventDefault();
+        const data = JSON.parse(e.dataTransfer.getData('text'));
+        console.log(data, e, this)
+        const id = Math.floor(Math.random() * 100);
+
+    }
+
+}
 
 WorkflowsList.propTypes = {
     workflows: PropTypes.array.isRequired,

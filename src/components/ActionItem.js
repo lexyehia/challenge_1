@@ -4,19 +4,41 @@ import PropTypes from 'prop-types';
 
 const styles = {
     panel: {
-        width: 60,
+        width: 80,
+        margin: 10,
     }
 };
 
-export const ActionItem = (props) => (
-    <Panel
-        style={styles.panel}
-        bsStyle='success'
-        draggable
-    >
-        {props.text}
-    </Panel>
-);
+export class ActionItem extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Panel
+                style={styles.panel}
+                bsStyle='success'
+                draggable
+                onDragStart={this._startDragHandler}
+            >
+                {this.props.text}
+            </Panel>
+        )
+    }
+
+    _startDragHandler = (e) => {
+        const data = {
+            action: this.props.text,
+        };
+
+        e.dataTransfer.setData('text', JSON.stringify(data));
+        e.dataTransfer.dropEffect = 'move';
+    }
+}
+
+
 
 ActionItem.propTypes = {
     text: PropTypes.string.isRequired,

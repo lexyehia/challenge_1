@@ -1,9 +1,12 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import _ from 'lodash';
 import { NavBar } from '../components/NavBar';
 import { WorkflowsList } from '../components/WorkflowsList';
+import { ActionsList } from "../components/ActionsList";
 
 export class WorkflowsPage extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -51,12 +54,18 @@ export class WorkflowsPage extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this._organizeWorkflow();
+    }
+
     render() {
         return (
             <div className='App'>
                 <NavBar />
                 <div>
                     <WorkflowsList workflows={this.state.workflows}/>
+                    <br />
+                    <ActionsList actions={this.state.actions}/>
                 </div>
                 <div>
                     <Button
@@ -75,5 +84,26 @@ export class WorkflowsPage extends React.Component {
                 </div>
             </div>
         )
+    }
+
+    _organizeWorkflow = () => {
+        const { workflows } = this.state;
+        const arr = [];
+        const first = _.find(workflows, 'isStart');
+        arr.push(first);
+
+        findNextInChain(workflows, arr, first);
+
+        this.setState({
+            workflows: arr,
+        })
+    }
+}
+
+function findNextInChain(originalArr, newArr, item) {
+    if (item.nextStage) {
+        const next = _.find(originalArr, ['id', item.nextStage]);
+        newArr.push(next);
+        return findNextInChain(originalArr, newArr, next);
     }
 }

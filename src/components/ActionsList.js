@@ -8,20 +8,19 @@ const styles = {
         direction: 'row',
         margin: '0 auto',
         justifyContent: 'space-between',
-        width: 400,
+        width: 500,
     },
 };
 
 
 export const ActionsList = (props) => (
     <div>
-        <h5>Available list of actions:</h5><br />
+        <h4>Available list of actions:</h4><br />
         <div style={styles.container}>
-            {props.actions.map(action => (
+            {props.actions.map((action, i) => (
                 <ActionItem
-                    key={action.id}
-                    id={action.id}
-                    text={action.action}
+                    key={i}
+                    text={action}
                 />
             ))}
         </div>
