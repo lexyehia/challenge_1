@@ -8,6 +8,16 @@ export class WorkflowsPage extends React.Component {
         super(props);
 
         this.state = {
+            _id: "bU4rMI7fEeeqxlvy4NOyyA==",
+            ProjectId: "bOd74o7fEeeqxlvy4NOyyA==",
+            AcctId: "GVb1w0skuUKO+FfzgvG+JA==",
+            actions: [
+                "Import",
+                "Export",
+                "Sort",
+                "Extract",
+                "Split",
+            ],
             workflows: [
                 {
                     "id": 1,
